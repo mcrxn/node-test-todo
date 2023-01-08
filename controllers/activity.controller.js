@@ -50,8 +50,7 @@ export class ActivityController {
 
       await ActivityService.deleteActivity(user, activityId);
 
-      console.log(user);
-      res.status(200).send(user);
+      res.sendStatus(204);
     } catch (error) {
       next(error);
     }

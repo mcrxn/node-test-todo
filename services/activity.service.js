@@ -56,22 +56,23 @@ export class ActivityService {
     try {
       const isUserOwner = user.activities.includes(activityId);
 
+      let deletedActivity;
+
       if (isUserOwner) {
-        await Activity.findOneAndDelete({
+        deletedActivity = await Activity.findOneAndDelete({
           _id: activityId,
         });
       } else {
-        throw "something";
+        throw "Bad Request";
       }
 
-      // const deletedActivity =
+      if (!deletedActivity) throw "Activity not found";
 
-      // console.log( typeof deletedActivity.valueOf() + " " + typeof activityId);
-      // user.activities = user.activities.filter(activityId => deletedActivity !== activityId);
-      // console.log(user.activities);
-      // user.save();
+      user.activities = user.activities.filter(
+        (activity) => deletedActivity._id.toString() !== activity._id.toString()
+      );
 
-      // if (!deletedActivity) throw "Activity Not found";
+      user.save();
     } catch (error) {
       throw error;
     }

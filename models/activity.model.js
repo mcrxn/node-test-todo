@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import { validateActivity } from "../validators/activity.validator.js";
 
 const { Schema } = mongoose;
 

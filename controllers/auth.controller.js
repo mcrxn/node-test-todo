@@ -1,12 +1,8 @@
 import { AuthService } from "../services/auth.service.js";
-import {
-  createAccessToken,
-  createRefreshToken,
-  verifyAccessToken,
-} from "../const/jwt.const.js";
+import { createAccessToken, createRefreshToken } from "../const/jwt.const.js";
 
 export class AuthController {
-  static async registerUser(req, res, next) {
+  static async registerUser(req, res) {
     try {
       const userData = req.body;
 
@@ -18,7 +14,7 @@ export class AuthController {
     }
   }
 
-  static async loginUser(req, res, next) {
+  static async loginUser(req, res) {
     try {
       const { email, password } = req.body;
 
@@ -28,13 +24,15 @@ export class AuthController {
 
       const refreshToken = createRefreshToken(user._id);
 
+      await AuthService.saveRefreshToken(user, refreshToken);
+
       res.status(200).send({ ...user.toJSON(), token, refreshToken });
     } catch (error) {
       res.status(401).send(error);
     }
   }
 
-  static async refreshAccesToken(req, res, next) {
+  static async refreshAccesToken(req, res) {
     try {
       const refreshToken = req.body.refreshToken;
 
@@ -54,11 +52,11 @@ export class AuthController {
     }
   }
 
-  static async logoutUser(req, res, next) {
+  static async logoutUser(req, res) {
     try {
       const user = req.user;
 
-      const refreshToken = req.body.newRefreshToken;
+      const refreshToken = req.body.refreshToken;
 
       await AuthService.deleteRefreshToken(user, refreshToken);
 
@@ -68,7 +66,7 @@ export class AuthController {
     }
   }
 
-  static async logoutAll(req, res, next) {
+  static async logoutAll(req, res) {
     try {
       const user = req.user;
 

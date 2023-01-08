@@ -10,7 +10,7 @@ const userSchema = new Schema({
     required: true,
     validate: {
       validator: (value) => validator.isEmail(value),
-      message: (message) => "invalid email",
+      message: "invalid email",
     },
     unique: true,
   },
@@ -60,6 +60,16 @@ userSchema.post("save", (error, _doc, next) => {
   }
 
   return next();
+});
+
+userSchema.set("toJSON", {
+  transform: function (_doc, ret, _opt) {
+    delete ret.password;
+    delete ret.__v;
+    delete ret.refreshTokens;
+
+    return ret;
+  },
 });
 
 export const User = mongoose.model("User", userSchema);
