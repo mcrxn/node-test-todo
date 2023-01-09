@@ -63,4 +63,4 @@ Endpoints for each service.
 
 - Run `npm start` to start the application.
 
-- Import the [Postman](https://web.postman.co/) collections from the collections folder to your postman workspace.
+- Import the [Postman](https://web.postman.co/) collections from the Postman Collections folder to your postman workspace.
